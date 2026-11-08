@@ -10,6 +10,8 @@ import org.example.pagoqr.home.presentation.screen.HomeScreen
 import org.example.pagoqr.payment.presentation.screen.PaymentScreen
 import org.example.pagoqr.qr.presentation.screen.GenerateQrScreen
 import org.example.pagoqr.qr.presentation.screen.ScanQrScreen
+import org.example.pagoqr.navigation.decodeRouteText
+import org.example.pagoqr.navigation.encodeRouteText
 
 @Composable
 fun AppNavHost() {
@@ -36,9 +38,7 @@ fun AppNavHost() {
         composable(NavRoute.HOME) {
             HomeScreen(
                 onPaymentClick = {
-                    navController.navigate(
-                        "payment?amount=&description="
-                    )
+                    navController.navigate(NavRoute.PAYMENT)
                 },
                 onHistoryClick = {
                     navController.navigate(NavRoute.HISTORY)
@@ -52,6 +52,10 @@ fun AppNavHost() {
             )
         }
 
+        composable(NavRoute.PAYMENT) {
+            PaymentScreen()
+        }
+
         composable(
             route = NavRoute.PAYMENT_QR
         ) { backStackEntry ->
@@ -61,6 +65,7 @@ fun AppNavHost() {
 
             val description = backStackEntry.arguments
                 ?.getString("description")
+                ?.let { decodeRouteText(it) }
 
             PaymentScreen(
                 initialAmount = amount,
@@ -80,8 +85,11 @@ fun AppNavHost() {
             ScanQrScreen(
                 onPayClick = { data ->
 
+                    val encodedDescription =
+                        encodeRouteText(data.description)
+
                     navController.navigate(
-                        "payment?amount=${data.amount}&description=${data.description}"
+                        "payment_qr?amount=${data.amount}&description=$encodedDescription"
                     )
                 }
             )
