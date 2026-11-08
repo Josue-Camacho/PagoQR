@@ -14,6 +14,8 @@ import org.example.pagoqr.history.domain.usecase.ClearHistoryUseCase
 import org.example.pagoqr.history.domain.usecase.ObserveHistoryUseCase
 import org.example.pagoqr.history.domain.usecase.SaveHistoryUseCase
 import org.example.pagoqr.history.presentation.viewmodel.HistoryViewModel
+import org.example.pagoqr.qr.domain.usecase.GenerateQrPaymentUseCase
+import org.example.pagoqr.qr.domain.usecase.ParseQrPaymentUseCase
 
 val appModule = module {
 
@@ -36,4 +38,8 @@ val appModule = module {
     singleOf(::ClearHistoryUseCase)
 
     viewModelOf(::HistoryViewModel)
+
+    singleOf(::GenerateQrPaymentUseCase)
+    singleOf(::ParseQrPaymentUseCase)
+
 }

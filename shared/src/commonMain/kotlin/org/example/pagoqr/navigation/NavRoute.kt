@@ -5,4 +5,6 @@ object NavRoute {
     const val HOME = "home"
     const val PAYMENT = "payment"
     const val HISTORY = "history"
+    const val GENERATE_QR = "generate_qr"
+    const val SCAN_QR = "scan_qr"
 }

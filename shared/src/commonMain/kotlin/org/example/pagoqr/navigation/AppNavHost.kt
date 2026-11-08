@@ -8,6 +8,8 @@ import org.example.pagoqr.auth.presentation.screen.LoginScreen
 import org.example.pagoqr.history.presentation.screen.HistoryScreen
 import org.example.pagoqr.home.presentation.screen.HomeScreen
 import org.example.pagoqr.payment.presentation.screen.PaymentScreen
+import org.example.pagoqr.qr.presentation.screen.GenerateQrScreen
+import org.example.pagoqr.qr.presentation.screen.ScanQrScreen
 
 @Composable
 fun AppNavHost() {
@@ -38,6 +40,12 @@ fun AppNavHost() {
                 },
                 onHistoryClick = {
                     navController.navigate(NavRoute.HISTORY)
+                },
+                onGenerateQrClick = {
+                    navController.navigate(NavRoute.GENERATE_QR)
+                },
+                onScanQrClick = {
+                    navController.navigate(NavRoute.SCAN_QR)
                 }
             )
         }
@@ -48,6 +56,14 @@ fun AppNavHost() {
 
         composable(NavRoute.HISTORY) {
             HistoryScreen()
+        }
+
+        composable(NavRoute.GENERATE_QR) {
+            GenerateQrScreen()
+        }
+
+        composable(NavRoute.SCAN_QR) {
+            ScanQrScreen()
         }
     }
 }

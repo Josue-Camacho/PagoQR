@@ -14,7 +14,9 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun HomeScreen(
     onPaymentClick: () -> Unit,
-    onHistoryClick: () -> Unit
+    onHistoryClick: () -> Unit,
+    onGenerateQrClick: () -> Unit,
+    onScanQrClick: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -35,5 +37,32 @@ fun HomeScreen(
         Button(onClick = onHistoryClick) {
             Text("Historial")
         }
+
+        Button(onClick = onGenerateQrClick) {
+            Text("Generar QR de cobro")
+        }
+
+        Button(onClick = onScanQrClick) {
+            Text("Escanear QR")
+        }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
