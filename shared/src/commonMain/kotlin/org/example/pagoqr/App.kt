@@ -6,13 +6,17 @@ import org.example.pagoqr.di.appModule
 import org.example.pagoqr.navigation.AppNavHost
 import org.koin.compose.KoinApplication
 import org.koin.dsl.koinConfiguration
+import org.example.pagoqr.di.platformModule
 
 @Composable
 fun App() {
 
     KoinApplication(
         configuration = koinConfiguration {
-            modules(appModule)
+            modules(
+                appModule,
+                platformModule
+            )
         }
     ) {
         MaterialTheme {

@@ -6,10 +6,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.example.pagoqr.history.domain.model.HistoryTransaction
+import org.example.pagoqr.history.domain.usecase.SaveHistoryUseCase
+import org.example.pagoqr.payment.domain.model.PaymentStatus
 import org.example.pagoqr.payment.domain.usecase.ProcessPaymentUseCase
 
 class PaymentViewModel(
-    private val processPaymentUseCase: ProcessPaymentUseCase
+    private val processPaymentUseCase: ProcessPaymentUseCase,
+    private val saveHistoryUseCase: SaveHistoryUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(PaymentState())
@@ -93,6 +97,18 @@ class PaymentViewModel(
                     amount = amount,
                     description = description
                 )
+
+                if (transaction.status == PaymentStatus.SUCCESS) {
+                    saveHistoryUseCase(
+                        HistoryTransaction(
+                            id = transaction.id,
+                            amount = transaction.amount,
+                            description = transaction.description,
+                            status = transaction.status.name,
+                            timestamp = transaction.timestamp
+                        )
+                    )
+                }
 
                 _state.update {
                     it.copy(

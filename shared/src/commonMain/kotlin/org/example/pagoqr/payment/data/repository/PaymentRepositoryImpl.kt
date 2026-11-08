@@ -1,5 +1,7 @@
 package org.example.pagoqr.payment.data.repository
 
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 import org.example.pagoqr.payment.data.datasource.PaymentRemoteDataSource
 import org.example.pagoqr.payment.domain.model.PaymentStatus
 import org.example.pagoqr.payment.domain.model.Transaction
@@ -9,6 +11,7 @@ class PaymentRepositoryImpl(
     private val dataSource: PaymentRemoteDataSource
 ) : PaymentRepository {
 
+    @OptIn(ExperimentalTime::class)
     override suspend fun processPayment(
         amount: Double,
         description: String
@@ -16,8 +19,11 @@ class PaymentRepositoryImpl(
 
         val success = dataSource.processPayment(amount)
 
+        val timestamp = Clock.System.now()
+            .toEpochMilliseconds()
+
         return Transaction(
-            id = "TX-${amount.toString().replace(".", "")}",
+            id = "TX-$timestamp",
             amount = amount,
             description = description,
             status = if (success) {
@@ -25,7 +31,7 @@ class PaymentRepositoryImpl(
             } else {
                 PaymentStatus.FAILED
             },
-            timestamp = 0L
+            timestamp = timestamp
         )
     }
 }
