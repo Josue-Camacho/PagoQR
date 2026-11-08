@@ -18,9 +18,11 @@ import org.example.pagoqr.qr.domain.model.QrPaymentData
 import org.example.pagoqr.qr.domain.usecase.ParseQrPaymentUseCase
 import org.example.pagoqr.qr.presentation.components.QrScannerButton
 import org.koin.compose.koinInject
+import androidx.compose.material3.Button
 
 @Composable
 fun ScanQrScreen(
+    onPayClick: (QrPaymentData) -> Unit,
     parseQrPaymentUseCase: ParseQrPaymentUseCase = koinInject()
 ) {
 
@@ -80,7 +82,18 @@ fun ScanQrScreen(
             Text("ID: ${data.paymentId}")
             Text("Monto: Bs ${data.amount}")
             Text("Descripción: ${data.description}")
+
+            Button(
+                onClick = {
+                    onPayClick(data)
+                }
+            ) {
+                Text("Pagar Bs ${data.amount}")
+            }
+
         }
+
+
 
         error?.let {
             Text(

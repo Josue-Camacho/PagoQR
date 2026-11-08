@@ -23,13 +23,30 @@ import org.koin.compose.viewmodel.koinViewModel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
 import io.github.alexzhirkevich.qrose.rememberQrCodePainter
-
+import androidx.compose.runtime.LaunchedEffect
 @Composable
 fun PaymentScreen(
+    initialAmount: String? = null,
+    initialDescription: String? = null,
     viewModel: PaymentViewModel = koinViewModel()
 ) {
 
     val state by viewModel.state.collectAsState()
+
+    LaunchedEffect(initialAmount, initialDescription) {
+
+        if (!initialAmount.isNullOrBlank()) {
+            viewModel.onEvent(
+                PaymentEvent.OnAmountChange(initialAmount)
+            )
+        }
+
+        if (!initialDescription.isNullOrBlank()) {
+            viewModel.onEvent(
+                PaymentEvent.OnDescriptionChange(initialDescription)
+            )
+        }
+    }
 
     Column(
         modifier = Modifier

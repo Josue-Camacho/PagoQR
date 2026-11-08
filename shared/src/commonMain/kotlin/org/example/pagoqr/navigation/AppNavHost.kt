@@ -36,7 +36,9 @@ fun AppNavHost() {
         composable(NavRoute.HOME) {
             HomeScreen(
                 onPaymentClick = {
-                    navController.navigate(NavRoute.PAYMENT)
+                    navController.navigate(
+                        "payment?amount=&description="
+                    )
                 },
                 onHistoryClick = {
                     navController.navigate(NavRoute.HISTORY)
@@ -50,8 +52,20 @@ fun AppNavHost() {
             )
         }
 
-        composable(NavRoute.PAYMENT) {
-            PaymentScreen()
+        composable(
+            route = NavRoute.PAYMENT_QR
+        ) { backStackEntry ->
+
+            val amount = backStackEntry.arguments
+                ?.getString("amount")
+
+            val description = backStackEntry.arguments
+                ?.getString("description")
+
+            PaymentScreen(
+                initialAmount = amount,
+                initialDescription = description
+            )
         }
 
         composable(NavRoute.HISTORY) {
@@ -63,7 +77,14 @@ fun AppNavHost() {
         }
 
         composable(NavRoute.SCAN_QR) {
-            ScanQrScreen()
+            ScanQrScreen(
+                onPayClick = { data ->
+
+                    navController.navigate(
+                        "payment?amount=${data.amount}&description=${data.description}"
+                    )
+                }
+            )
         }
     }
 }
