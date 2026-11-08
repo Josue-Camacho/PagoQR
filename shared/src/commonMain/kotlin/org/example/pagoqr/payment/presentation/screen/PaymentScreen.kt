@@ -20,6 +20,9 @@ import org.example.pagoqr.payment.domain.model.PaymentStatus
 import org.example.pagoqr.payment.presentation.viewmodel.PaymentEvent
 import org.example.pagoqr.payment.presentation.viewmodel.PaymentViewModel
 import org.koin.compose.viewmodel.koinViewModel
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.size
+import io.github.alexzhirkevich.qrose.rememberQrCodePainter
 
 @Composable
 fun PaymentScreen(
@@ -105,6 +108,20 @@ fun PaymentScreen(
             Text("ID: ${transaction.id}")
             Text("Monto: Bs ${transaction.amount}")
             Text("Descripción: ${transaction.description}")
+
+            val qrData =
+                "PAGOQR|id=${transaction.id}|amount=${transaction.amount}|description=${transaction.description}"
+
+            Text(
+                text = "QR de la transacción",
+                style = MaterialTheme.typography.titleMedium
+            )
+
+            Image(
+                painter = rememberQrCodePainter(qrData),
+                contentDescription = "QR de la transacción",
+                modifier = Modifier.size(220.dp)
+            )
         }
     }
 }
