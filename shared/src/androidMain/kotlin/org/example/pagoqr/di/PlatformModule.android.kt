@@ -5,6 +5,8 @@ import org.example.pagoqr.config.AppDatabase
 import org.example.pagoqr.config.getDatabaseBuilder
 import org.example.pagoqr.config.getRoomDatabase
 import org.koin.dsl.module
+import org.example.pagoqr.payment.data.repository.StripePaymentGatewayImpl
+import org.example.pagoqr.payment.domain.repository.StripePaymentGateway
 
 actual val platformModule = module {
 
@@ -18,5 +20,9 @@ actual val platformModule = module {
 
     single {
         get<AppDatabase>().transactionDao()
+    }
+
+    single<StripePaymentGateway> {
+        StripePaymentGatewayImpl()
     }
 }

@@ -5,5 +5,6 @@ import org.example.pagoqr.history.domain.model.HistoryTransaction
 data class HistoryState(
     val transactions: List<HistoryTransaction> = emptyList(),
     val isLoading: Boolean = true,
+    val refundingTransactionId: String? = null,
     val error: String? = null
 )

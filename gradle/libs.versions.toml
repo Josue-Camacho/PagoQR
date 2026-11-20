@@ -22,6 +22,7 @@ room3 = "3.0.3"
 sqlite = "2.7.1"
 ksp = "2.3.10"
 codeScanner = "16.1.0"
+stripe = "23.25.2"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -52,7 +53,7 @@ androidx-room3-runtime = { module = "androidx.room3:room3-runtime", version.ref 
 androidx-room3-compiler = { module = "androidx.room3:room3-compiler", version.ref = "room3" }
 androidx-sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
 google-code-scanner = { module = "com.google.android.gms:play-services-code-scanner", version.ref = "codeScanner" }
-
+stripe-android = { module = "com.stripe:stripe-android", version.ref = "stripe" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

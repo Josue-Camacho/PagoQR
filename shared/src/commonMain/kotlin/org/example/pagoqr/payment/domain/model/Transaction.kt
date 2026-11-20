@@ -11,5 +11,6 @@ data class Transaction(
 enum class PaymentStatus {
     PENDING,
     SUCCESS,
-    FAILED
+    FAILED,
+    REFUNDED
 }

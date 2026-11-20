@@ -16,6 +16,9 @@ import org.example.pagoqr.history.domain.usecase.SaveHistoryUseCase
 import org.example.pagoqr.history.presentation.viewmodel.HistoryViewModel
 import org.example.pagoqr.qr.domain.usecase.GenerateQrPaymentUseCase
 import org.example.pagoqr.qr.domain.usecase.ParseQrPaymentUseCase
+import org.example.pagoqr.payment.domain.usecase.CreateStripePaymentIntentUseCase
+import org.example.pagoqr.payment.domain.usecase.GetStripePaymentStatusUseCase
+import org.example.pagoqr.payment.domain.usecase.RefundStripePaymentUseCase
 
 val appModule = module {
 
@@ -41,5 +44,8 @@ val appModule = module {
 
     singleOf(::GenerateQrPaymentUseCase)
     singleOf(::ParseQrPaymentUseCase)
+    singleOf(::CreateStripePaymentIntentUseCase)
+    singleOf(::GetStripePaymentStatusUseCase)
+    singleOf(::RefundStripePaymentUseCase)
 
 }

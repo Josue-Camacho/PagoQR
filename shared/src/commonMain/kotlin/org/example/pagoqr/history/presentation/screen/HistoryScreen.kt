@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import org.example.pagoqr.history.presentation.viewmodel.HistoryEvent
 import org.example.pagoqr.history.presentation.viewmodel.HistoryViewModel
 import org.koin.compose.viewmodel.koinViewModel
+import org.example.pagoqr.payment.domain.model.PaymentStatus
 
 @Composable
 fun HistoryScreen(
@@ -101,6 +102,37 @@ fun HistoryScreen(
                         Text("Monto: Bs ${transaction.amount}")
                         Text("Estado: ${transaction.status}")
                         Text("ID: ${transaction.id}")
+
+                        if (
+                            transaction.status == PaymentStatus.SUCCESS.name &&
+                            transaction.id.startsWith("pi_")
+                        ) {
+
+                            Button(
+                                onClick = {
+                                    viewModel.onEvent(
+                                        HistoryEvent.OnRefund(
+                                            transaction
+                                        )
+                                    )
+                                },
+                                enabled =
+                                    state.refundingTransactionId !=
+                                            transaction.id
+                            ) {
+
+                                Text(
+                                    if (
+                                        state.refundingTransactionId ==
+                                        transaction.id
+                                    ) {
+                                        "Reembolsando..."
+                                    } else {
+                                        "Reembolsar"
+                                    }
+                                )
+                            }
+                        }
                     }
                 }
             }

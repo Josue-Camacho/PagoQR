@@ -7,5 +7,8 @@ data class PaymentState(
     val description: String = "",
     val isLoading: Boolean = false,
     val transaction: Transaction? = null,
-    val error: String? = null
+    val error: String? = null,
+
+    val stripeClientSecret: String? = null,
+    val stripePaymentIntentId: String? = null
 )

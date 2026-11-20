@@ -24,6 +24,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
 import io.github.alexzhirkevich.qrose.rememberQrCodePainter
 import androidx.compose.runtime.LaunchedEffect
+import org.example.pagoqr.payment.presentation.components.StripePaymentSheet
+
+
 @Composable
 fun PaymentScreen(
     initialAmount: String? = null,
@@ -32,6 +35,32 @@ fun PaymentScreen(
 ) {
 
     val state by viewModel.state.collectAsState()
+
+
+    StripePaymentSheet(
+        clientSecret =
+            state.stripeClientSecret,
+
+        onCompleted = {
+            viewModel.onEvent(
+                PaymentEvent.OnStripePaymentCompleted
+            )
+        },
+
+        onCanceled = {
+            viewModel.onEvent(
+                PaymentEvent.OnStripePaymentCanceled
+            )
+        },
+
+        onFailed = { message ->
+            viewModel.onEvent(
+                PaymentEvent.OnStripePaymentFailed(
+                    message
+                )
+            )
+        }
+    )
 
     LaunchedEffect(initialAmount, initialDescription) {
 
@@ -89,12 +118,20 @@ fun PaymentScreen(
 
         Button(
             onClick = {
-                viewModel.onEvent(PaymentEvent.OnPay)
+                viewModel.onEvent(
+                    PaymentEvent.OnStripePay
+                )
             },
-            enabled = !state.isLoading,
-            modifier = Modifier.fillMaxWidth()
+            enabled = !state.isLoading
         ) {
-            Text("Pagar")
+
+            Text(
+                if (state.isLoading) {
+                    "Conectando con Stripe..."
+                } else {
+                    "Pagar con Stripe"
+                }
+            )
         }
 
         if (state.isLoading) {
@@ -115,6 +152,7 @@ fun PaymentScreen(
                 PaymentStatus.SUCCESS -> "Pago exitoso"
                 PaymentStatus.FAILED -> "Pago rechazado"
                 PaymentStatus.PENDING -> "Pago pendiente"
+                PaymentStatus.REFUNDED -> "Pago reembolsado"
             }
 
             Text(

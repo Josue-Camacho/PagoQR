@@ -39,6 +39,7 @@ kotlin {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.compose.uiTooling)
             implementation(libs.google.code.scanner)
+            implementation(libs.stripe.android)
         }
 
         commonMain.dependencies {
