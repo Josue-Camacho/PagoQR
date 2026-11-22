@@ -5,18 +5,25 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import org.example.pagoqr.auth.presentation.screen.LoginScreen
+import org.example.pagoqr.demo.presentation.screen.DemoScenariosScreen
 import org.example.pagoqr.history.presentation.screen.HistoryScreen
 import org.example.pagoqr.home.presentation.screen.HomeScreen
 import org.example.pagoqr.payment.presentation.screen.PaymentScreen
 import org.example.pagoqr.qr.presentation.screen.GenerateQrScreen
 import org.example.pagoqr.qr.presentation.screen.ScanQrScreen
-import org.example.pagoqr.navigation.decodeRouteText
-import org.example.pagoqr.navigation.encodeRouteText
 
 @Composable
 fun AppNavHost() {
 
     val navController = rememberNavController()
+    val onViewHistory: () -> Unit = {
+        navController.navigate(NavRoute.HISTORY) { launchSingleTop = true }
+    }
+    val onNewPayment: (paymentRoute: String) -> Unit = { paymentRoute ->
+        navController.navigate(NavRoute.PAYMENT) {
+            popUpTo(paymentRoute) { inclusive = true }
+        }
+    }
 
     NavHost(
         navController = navController,
@@ -37,6 +44,9 @@ fun AppNavHost() {
 
         composable(NavRoute.HOME) {
             HomeScreen(
+                onDemoScenariosClick = {
+                    navController.navigate(NavRoute.DEMO_SCENARIOS)
+                },
                 onPaymentClick = {
                     navController.navigate(NavRoute.PAYMENT)
                 },
@@ -52,8 +62,21 @@ fun AppNavHost() {
             )
         }
 
+        composable(NavRoute.DEMO_SCENARIOS) {
+            DemoScenariosScreen(
+                onBackClick = { navController.popBackStack() },
+                onPaymentClick = { amount, description ->
+                    navController.navigate(NavRoute.paymentWithDetails(amount, description))
+                },
+                onRefundClick = { navController.navigate(NavRoute.HISTORY) }
+            )
+        }
+
         composable(NavRoute.PAYMENT) {
-            PaymentScreen()
+            PaymentScreen(
+                onHistoryClick = onViewHistory,
+                onNewPaymentClick = { onNewPayment(NavRoute.PAYMENT) }
+            )
         }
 
         composable(
@@ -68,6 +91,8 @@ fun AppNavHost() {
                 ?.let { decodeRouteText(it) }
 
             PaymentScreen(
+                onHistoryClick = onViewHistory,
+                onNewPaymentClick = { onNewPayment(NavRoute.PAYMENT_QR) },
                 initialAmount = amount,
                 initialDescription = description
             )
@@ -85,11 +110,8 @@ fun AppNavHost() {
             ScanQrScreen(
                 onPayClick = { data ->
 
-                    val encodedDescription =
-                        encodeRouteText(data.description)
-
                     navController.navigate(
-                        "payment_qr?amount=${data.amount}&description=$encodedDescription"
+                        NavRoute.paymentWithDetails(data.amount.toString(), data.description)
                     )
                 }
             )

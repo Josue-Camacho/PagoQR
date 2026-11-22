@@ -3,6 +3,7 @@ package org.example.pagoqr.qr.presentation.components
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
@@ -11,7 +12,8 @@ import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
 @Composable
 actual fun QrScannerButton(
     onScanned: (String) -> Unit,
-    onError: (String) -> Unit
+    onError: (String) -> Unit,
+    modifier: Modifier
 ) {
     val context = LocalContext.current
 
@@ -28,6 +30,7 @@ actual fun QrScannerButton(
     )
 
     Button(
+        modifier = modifier,
         onClick = {
             scanner.startScan()
                 .addOnSuccessListener { barcode ->
@@ -51,6 +54,6 @@ actual fun QrScannerButton(
                 }
         }
     ) {
-        Text("Escanear QR")
+        Text("Escanear código QR")
     }
 }
